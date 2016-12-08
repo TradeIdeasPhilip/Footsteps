@@ -480,11 +480,6 @@ namespace Footsteps
         private void modeInitialButton_Click(object sender, RoutedEventArgs e)
         {
             modeInitialRadioButton.IsChecked = true;
-
-            // The following seems redundant.  We left it out on the other two buttons.
-            // Let the radio button do all the work so it's only in one place.
-            UpdateGuiState();
-            NotifySoon();
         }
 
         /// <summary>
