@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace Footsteps
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// This shows a simple level.  It has one WorldView, one Editor, and one StatusPanel.
     /// </summary>
     public partial class MainWindow : UserControl
     {

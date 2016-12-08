@@ -16,7 +16,9 @@ using System.Windows.Shapes;
 namespace Footsteps
 {
     /// <summary>
-    /// Interaction logic for WorldView.xaml
+    /// This displays the current state of the world.  Major inputs include a Map to say
+    /// the starting state and list of Command objects representing the program that we
+    /// ran from this starting state.
     /// </summary>
     public partial class WorldView : UserControl, ProgramStateProvider
     {
@@ -26,11 +28,23 @@ namespace Footsteps
             MapString = "";
         }
 
+        /// <summary>
+        /// Save this only so MapString can be a read/write property.  Internally we only care about the
+        /// _map.
+        /// </summary>
         private String _mapString;
+
+        /// <summary>
+        /// This is the world.  This includes all fixed objects, and the player's starting place.
+        /// </summary>
         private Map _map;
 
         // The Editor line below is supposed to give me a multi-line text box to edit this property.
         // It doesn't work.  It seems to be ignored.  I can only enter a single line.  :(
+        /// <summary>
+        /// Describe the world.  We made this a String property, rather than a Map property, so it would be
+        /// easy to read from xaml, from the designer, from a TextBox, etc.
+        /// </summary>
         [Editor(typeof(System.ComponentModel.Design.MultilineStringEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public String MapString
         {
@@ -100,8 +114,27 @@ namespace Footsteps
             ProgramState = ProgramState.Won;
         }
 
+        /// <summary>
+        /// Save the list of footsteps so we can erase them later.  Even for a small
+        /// change we typically start fresh each time, erasing all old footsteps.
+        /// </summary>
         private List<UIElement> _footSteps = new List<UIElement>();
 
+        /// <summary>
+        /// The program asked us to move somewhere.
+        /// </summary>
+        /// <param name="dx">
+        /// Delta X.  
+        /// -1 means one step left.
+        /// 1 means one step right.
+        /// 0 means no change on this axis.
+        /// </param>
+        /// <param name="dy">
+        /// Delta Y.
+        /// -1 means one step up.
+        /// 1 means one step down.
+        /// 0 means no change on this axis.
+        /// </param>
         private void TryToMove(int dx, int dy)
         {
             int previousX = _playerX;
@@ -190,6 +223,11 @@ namespace Footsteps
             }
         }
 
+        /// <summary>
+        /// Go here.  Consider calling TryToMove(), which calls this and does other work.
+        /// </summary>
+        /// <param name="x">0 is the left column.</param>
+        /// <param name="y">0 is the top row.</param>
         private void SetPlayerPosition(int x, int y)
         {
             _playerX = x;
@@ -200,6 +238,13 @@ namespace Footsteps
 
         private IEnumerable<Command> _program = new List<Command>();
 
+        /// <summary>
+        /// The program to run.
+        /// 
+        /// Note:  We don't know if the program object itself changes.  The only event we get
+        /// is that someone set this property.  We just assume that the underlying object is 
+        /// read-only.
+        /// </summary>
         public IEnumerable< Command > Program
         {
             get { return _program; }
@@ -251,6 +296,10 @@ namespace Footsteps
 
         private ProgramState _programState;
 
+        /// <summary>
+        /// This is required by the ProgramStateProvider interface.
+        /// This is used by the StatusPanel.
+        /// </summary>
         public ProgramState ProgramState
         {
             get { return _programState; }
@@ -261,8 +310,17 @@ namespace Footsteps
             }
         }
 
+        /// <summary>
+        /// We raise this event any time the ProgramState changes.
+        /// 
+        /// We might raise this more often than expected.  The listener should consolidate
+        /// related changes.
+        /// </summary>
         public event Action ProgramStateChanged;
     }
 
+    /// <summary>
+    /// The user's program is just a list of these items.
+    /// </summary>
     public enum Command { Up, Down, Left, Right } 
 }

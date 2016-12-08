@@ -7,14 +7,45 @@ namespace Footsteps
 {
     enum CellType { Free, Blocked, Goal, Death };
 
+    /// <summary>
+    /// This describes the world before you make any moves.  This includes the player's starting
+    /// position, the size of the world, and the positions of any fixed objects, like the goal.
+    /// </summary>
     class Map
     {
         private readonly List<List<CellType>> _rows = new List<List<CellType>>();
         static readonly char[] SPLIT = new char[] { '\n', '|' };
+
+        /// <summary>
+        /// The player's initial position.
+        /// </summary>
         public int InitialX { get; private set; }
+
+        /// <summary>
+        /// The player's initial position.
+        /// </summary>
         public int InitialY { get; private set; }
+
+        /// <summary>
+        /// How tall is the world?
+        /// </summary>
         public int RowCount { get { return _rows.Count; } }
+
+        /// <summary>
+        /// How wide is the world?
+        /// </summary>
         public int ColumnCount { get; private set; }
+
+        /// <summary>
+        /// Find the content of the cell.  This only finds fixed items, like monsters.
+        /// The player can move, so WoldView needs to keep track of the player's position. 
+        /// 
+        /// It is legal to ask for the content of a cell that's off the edge of the map.
+        /// That always shows up as blocked.  That makes it easier for other components.
+        /// </summary>
+        /// <param name="x">0 is the far left.  Positive numbers go right.</param>
+        /// <param name="y">0 is the top.  Positive numbers go down.</param>
+        /// <returns>The content of the requested cell.</returns>
         public CellType GetCellType(int x, int y)
         {
             if ((x < 0) || (y < 0))
@@ -26,10 +57,21 @@ namespace Footsteps
                 return CellType.Blocked;
             return row[x];
         }
+
+        /// <summary>
+        /// Create a map from a single string, using a | or a new line to seperate each row from the next.
+        /// </summary>
+        /// <param name="encoded"></param>
+        /// <returns></returns>
         public static Map FromOneString(string encoded)
         {
             return new Map(encoded.Split(SPLIT));
         }
+
+        /// <summary>
+        /// Create a map from an array of strings.  That might be easier to write in some cases.
+        /// </summary>
+        /// <param name="encodedRows"></param>
         public Map(params string[] encodedRows)
         {
             foreach (string encodedRow in encodedRows)

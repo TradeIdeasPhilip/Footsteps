@@ -14,7 +14,8 @@ using System.Windows.Shapes;
 namespace Footsteps
 {
     /// <summary>
-    /// Interaction logic for DoubleMap.xaml
+    /// This is the top level control that lets you control two different maps with the
+    /// same program.
     /// </summary>
     public partial class DoubleMap : UserControl
     {

@@ -14,7 +14,8 @@ using System.Windows.Shapes;
 namespace Footsteps
 {
     /// <summary>
-    /// Interaction logic for CustomMap.xaml
+    /// This is the top level control that lets the end user change the map while the program
+    /// is running.
     /// </summary>
     public partial class CustomMap : UserControl
     {

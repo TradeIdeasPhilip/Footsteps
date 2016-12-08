@@ -17,7 +17,7 @@ using System.Windows.Threading;
 namespace Footsteps.Demo
 {
     /// <summary>
-    /// Interaction logic for DemoMain.xaml
+    /// Draw the interactive help animations.
     /// </summary>
     public partial class DemoMain : UserControl
     {
@@ -73,6 +73,11 @@ namespace Footsteps.Demo
             toChange.Visibility = (toChange == shouldBeVisible) ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// In the designer you see three rows of instructions.  We only want to show one at
+        /// a time to the user.
+        /// </summary>
+        /// <param name="instructions">The row we want to be visible.</param>
         private void ShowInstructions(UIElement instructions)
         {
             Show(instructionsPrincess, instructions);
@@ -80,6 +85,10 @@ namespace Footsteps.Demo
             Show(instructionsMonster, instructions);
         }
 
+        /// <summary>
+        /// Slowly change the item to become mostly transparent.
+        /// </summary>
+        /// <param name="toFade"></param>
         private void AnimatedFade(UIElement toFade)
         {
             DoubleAnimation myDoubleAnimation = new DoubleAnimation();

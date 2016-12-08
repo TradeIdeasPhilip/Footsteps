@@ -16,10 +16,18 @@ using System.Windows.Threading;
 namespace Footsteps
 {
     /// <summary>
-    /// Interaction logic for Editor.xaml
+    /// This control allows the end user to change a program.  This
+    /// also includes options to close the current window and to
+    /// start or stop the program from running.
     /// </summary>
     public partial class Editor : UserControl
     {
+        /// <summary>
+        /// When someone clicks on our home button, we remove this item.
+        /// If this is null nothing will happen when you click the home button.
+        /// We never gray out the home button.  We could, but it doesn't seem
+        /// important because we almost never expect this to be null.
+        /// </summary>
         public FrameworkElement ElementToClose;
 
         public Editor()
@@ -53,16 +61,34 @@ namespace Footsteps
             }
         }
 
+        /// <summary>
+        /// How big are the arrows that we draw as part of the program.
+        /// Sometimes we have to shrink them to make them fit.  The new
+        /// items should be as small as the ones we already shrunk.  We
+        /// use this size for the new ones.
+        /// </summary>
         private double _commandFontSize = 48.0;
 
+        /// <summary>
+        /// This timer is used to update the program when the user selects animate mode.
+        /// </summary>
         private DispatcherTimer _timer = new DispatcherTimer();
 
+        /// <summary>
+        /// This updates the animation on the animate button.
+        /// (The button itself is animated to make it more like the thing it's trying to represent.)
+        /// </summary>
         private DispatcherTimer _buttonTimer = new DispatcherTimer();
 
         // Start with 1 (the second step) because it looks good as a static image in
         // the designer.
         private int _buttonAnimationStep = 1;
 
+        /// <summary>
+        /// The button that asks the computer to animate your soltuion is itself animated.  We show
+        /// an icon when we are at the beginning of the journey, with future step grayed out,
+        /// an icon at the end with footsteps for history, and one in between.
+        /// </summary>
         private string[] _buttonImages = new string[] { "Initial.png", "Center.png", "Final.png" };
 
         private void _buttonTimer_Tick(object sender, EventArgs e)
@@ -77,17 +103,16 @@ namespace Footsteps
             animateImage.Source = new BitmapImage(uri);
         }
 
+        /// <summary>
+        /// Something has changed.  See if we need to make the font smaller so the entire
+        /// program is visible.
+        /// </summary>
         private void CheckFontSizeNow()
         {
             // Ideally we'd make the font bigger when we have space.  But that's a lot harder
             // than what we're doing.  This routine will shrink the font size if we don't have
             // room for everything.  We only make the font size bigger when we first start and
             // when someone hits the clear button.
-            /*
-            System.Diagnostics.Debug.WriteLine(DateTime.Now.ToLongTimeString()
-                + ":  Starting CheckFontSizeNow() Available=" + sizeHelper.ActualHeight
-                + ", Used=" + programWrapPanel.ActualHeight);
-                */
             if (programWrapPanel.ActualHeight > sizeHelper.ActualHeight)
             {
                 double newFontSize;
@@ -99,8 +124,6 @@ namespace Footsteps
                     newFontSize = 18.0;
                 else
                     newFontSize = 12.0;
-                //System.Diagnostics.Debug.WriteLine("Initial font size:  " + _commandFontSize
-                //    + ", new font size:  " + newFontSize);
                 if (_commandFontSize != newFontSize)
                 {
                     _commandFontSize = newFontSize;
@@ -115,10 +138,15 @@ namespace Footsteps
                     }
                 }
             }
-            //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToLongTimeString()
-            //    + ":  CheckFontSizeNow() finished");
         }
 
+        /// <summary>
+        /// There might be several events related to the font size all at once.
+        /// Wait for them all to finish.  We don't want to react to an intermedite result.  In
+        /// particular, what if the area was temporarily very small but then it immediately
+        /// grew again.  Our code isn't smart enought to deal with that.  We'd pick a small
+        /// font size and never go back to the big one.
+        /// </summary>
         private readonly WakeMeSoon _checkFontSize = new WakeMeSoon();
 
         /// <summary>
@@ -162,29 +190,6 @@ namespace Footsteps
                 programWrapPanel.Children.RemoveAt(currentPosition);
                 programWrapPanel.Children.Insert(_cursorPosition, cursorLabel);
             }
-
-            /*
-            int index = 0;
-            foreach (UIElement child in programWrapPanel.Children)
-            {
-                Control control = child as Control;
-                if (null != child)
-                {
-                    bool isSelected = index == _selectionIndex;
-                    if (isSelected)
-                    {
-                        control.Foreground = SystemColors.HighlightTextBrush;
-                        control.Background = SystemColors.HighlightBrush;
-                    }
-                    else
-                    {
-                        control.Foreground = SystemColors.ControlTextBrush;
-                        control.Background = SystemColors.ControlLightBrush;
-                    }
-                }
-                index++;
-            }
-            */
         }
 
         private static readonly Dictionary<Command, string> _commandStrings = new Dictionary<Command, string>
@@ -195,11 +200,23 @@ namespace Footsteps
             { Command.Right, "→" }
         };
 
+        /// <summary>
+        /// The user never types these special unicode characters.  The input usually comes from a button.
+        /// But we decided to display the arrows as unicode characters.  That was sometimes more convenient
+        /// than making images.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         public static String ToString(Command command)
         {
             return _commandStrings[command];
         }
 
+        /// <summary>
+        /// Inserts a new command into the editor where the cursor is.  Displays the new program in our control
+        /// and notifies any external listeners.
+        /// </summary>
+        /// <param name="command"></param>
         private void Add(Command command)
         {
             _program.Insert(_cursorPosition, command);
@@ -214,6 +231,14 @@ namespace Footsteps
             NotifySoon();
         }
 
+        /// <summary>
+        /// At one time we had a way to select a command.  Now we only put the cursor between
+        /// two commands.  We might want to reuse this callback to use the mouse to move the
+        /// cursor.  If you click on the left side of a command icon, you'll move to the cursor
+        /// just to the left of that command.  Same thing on the right.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CommandIcon_MouseDown(object sender, MouseButtonEventArgs e)
         {
             /*
@@ -229,13 +254,30 @@ namespace Footsteps
             */
         }
 
+        /// <summary>
+        /// Notify any external listeners.
+        /// 
+        /// The name implies that we might use a WakeMeSoon object here.  We know that we sometimes
+        /// make more than one change at a time, so we could consolidate the outgoing messages.
+        /// </summary>
         void NotifySoon()
         {
             ProgramChanged?.Invoke(this);
         }
 
+        /// <summary>
+        /// 0 is to the left of the first command.  If there are no commands, 0 is to the left of
+        /// where the first command would go, and no other values are legal here.  3 is between the
+        /// 3rd and 4th commands.  3 would only be legal here if we had at least 3 commands.
+        /// </summary>
         private int _cursorPosition = 0;
 
+        /// <summary>
+        /// Completely reset the program.  Update our own GUI and notify any external listeners.
+        /// 
+        /// Note that this is the only place where we make the font big again.  Ideally we'd do
+        /// that more often, but it's difficult and I don't expect it to be a problem in real life.
+        /// </summary>
         public void Clear()
         {
             _commandFontSize = 48.0;
@@ -248,8 +290,18 @@ namespace Footsteps
             NotifySoon();
         }
 
+        /// <summary>
+        /// Note that this refers to the complete program, not just the part that we're
+        /// sharing with the rest of our code.  More precisely, this corresponds to the
+        /// FullProgram property, not the Program property.
+        /// </summary>
         private List<Command> _program = new List<Command>();
 
+        /// <summary>
+        /// The main program isn't directly aware of this option.  The main program can't
+        /// tell if the user asked to animate his program, or if he keeps retyping, then
+        /// completely clearing his program over and over.
+        /// </summary>
         private bool AnimationInProgress
         {
             get
@@ -258,21 +310,48 @@ namespace Footsteps
             }
         }
 
+        /// <summary>
+        /// A small optimization.  So we don't have to create a lot of objects that
+        /// are all empty lists.
+        /// 
+        /// Note that we actually use an array, not a list.  If someone were to try
+        /// to change this object, it would fail at runtime.  So this automatically
+        /// is a constant list.
+        /// </summary>
         private static readonly IList<Command> EMPTY_PROGRAM = new Command[0];
 
+        /// <summary>
+        /// This is what we typically share with the main program.  The value depends on
+        /// what program the user wrote, and what mode we are in.
+        /// </summary>
         public IList<Command> Program
         {
             get
             {
                 if (modeInitialRadioButton.IsChecked == true)
+                    // "Hard" mode.  We only display the program as a list of steps.  We
+                    // don't ask the listeners to display the result until the user switches
+                    // modes.  Like running a real program.
                     return EMPTY_PROGRAM;
                 else if (AnimationInProgress)
+                    // Note that we use the cursor both for editing and for showing where
+                    // we are in the animation.  We disable editing while we're displaying
+                    // the animation.  That avoids some confusion.
                     return _program.GetRange(0, _cursorPosition);
                 else
+                    // Display everything.  So the user can see the results of his program.
+                    // You can edit in this mode.  That's the default for the "easy" setting.
+                    // It can also be interesting to change steps in the middle of your
+                    // program while we're in this mode.
                     return FullProgram;
             }
         }
 
+        /// <summary>
+        /// Read or set the entire program, regardless of the mode.  This does a complete
+        /// reset, including moving the cursor all the way to the left.  Use Add() if you
+        /// want to make a more precise change.
+        /// </summary>
         public IList<Command> FullProgram
         {
             get { return _program; }
@@ -304,8 +383,16 @@ namespace Footsteps
             Add(Command.Right);
         }
 
+        /// <summary>
+        /// This gets called each time the value of the Program property changes.
+        /// </summary>
         public event Action<Editor> ProgramChanged;
 
+        /// <summary>
+        /// Backspace.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void deleteLeftButton_Click(object sender, RoutedEventArgs e)
         {
             _program.RemoveAt(_cursorPosition - 1);
@@ -315,6 +402,11 @@ namespace Footsteps
             NotifySoon();
         }
 
+        /// <summary>
+        /// Delete.  Currently this is disabled in the GUI.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void deleteRightButton_Click(object sender, RoutedEventArgs e)
         {
             _program.RemoveAt(_cursorPosition);
@@ -328,18 +420,47 @@ namespace Footsteps
             Clear();
         }
 
+        /// <summary>
+        /// It was hard to find the event that I wanted.  I wanted to know any time the space
+        /// available for the program changed.  E.g. someone resized the window.  I ended up
+        /// creating a control that lives in the same grid cell where we put the program.
+        /// This is invisible and it sits behind the program, so the user is not directly aware
+        /// of it.  But it is attached to all four walls of the grid cell, and it calls this
+        /// functions any time it gets resized.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sizeHelperImage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToLongTimeString() + ":  size helper size changed");
             _checkFontSize.RequestWakeUp();
         }
 
+        /// <summary>
+        /// The program displays itself in a specific grid cell.  It is attached to the bottom.
+        /// So when you start, your arrows are at the bottom of the cell.  If it grows to be two
+        /// rows tall, the first row moves up, and the second row is on the bottom of the grid
+        /// cell.  If we have too much to display, the bottom row will stay at the bottom of the
+        /// grid cell.  The top might be off the top of the grid cell in which case it will get
+        /// clipped.
+        /// 
+        /// Any time the size of this element changes, we consider if we need a smaller font.
+        /// We attempt to use the smaller font to avoid cutting anything off.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void programWrapPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToLongTimeString() + ":  wrap panel size changed");
             _checkFontSize.RequestWakeUp();
         }
 
+        /// <summary>
+        /// Note that we start the timer in the constructor, not the loaded event.  We assume
+        /// that you'll never reuse one of these objects.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine(DateTime.Now.ToLongTimeString() + ":  Editor unloaded.");
@@ -347,13 +468,30 @@ namespace Footsteps
             _buttonTimer.Stop();
         }
 
+        /// <summary>
+        /// If the user clicks on this ordinary Button, pass the message on to the
+        /// nearby RadioButton.
+        /// 
+        /// If you put an image in a RadioButton it looks different from putting
+        /// an image in a normal Button.  I wanted the look of a normal button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void modeInitialButton_Click(object sender, RoutedEventArgs e)
         {
             modeInitialRadioButton.IsChecked = true;
+
+            // The following seems redundant.  We left it out on the other two buttons.
+            // Let the radio button do all the work so it's only in one place.
             UpdateGuiState();
             NotifySoon();
         }
 
+        /// <summary>
+        /// Don't show the results of the program yet.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void modeInitialRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             _timer.Stop();
@@ -361,6 +499,12 @@ namespace Footsteps
             NotifySoon();
         }
 
+        /// <summary>
+        /// Show the result of running the entire program.  If someone edits the program,
+        /// immediately update the result based on the new program.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void modeFinalRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             _timer.Stop();
@@ -368,6 +512,14 @@ namespace Footsteps
             NotifySoon();
         }
 
+        /// <summary>
+        /// Show the program running one step at a time.  Use the cursor to show where 
+        /// we are in the program.  Use a timer to move to the next step.  When we get
+        /// to the end, automatically start over.  Disable editing.  The cursor means
+        /// something different in animation mode, so this avoids some confusion.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void modeAnimateRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             _timer.Start();
@@ -397,6 +549,12 @@ namespace Footsteps
             UpdateGuiState();
         }
 
+        /// <summary>
+        /// Go back to the main menu.  This doesn't just close the editor control.
+        /// Typically it closes one or two viewers, and some additional controls.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void homeButton_Click(object sender, RoutedEventArgs e)
         {
             if (null != ElementToClose)
