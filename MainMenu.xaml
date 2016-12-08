@@ -25,7 +25,7 @@
                 </RadioButton>
             </Grid>
         </GroupBox>
-        <Button x:Name="helpButton" HorizontalAlignment="Left" Margin="435,24,0,0" VerticalAlignment="Top" Width="159" Height="162">
+        <Button x:Name="helpButton" HorizontalAlignment="Left" Margin="435,24,0,0" VerticalAlignment="Top" Width="159" Height="162" Visibility="Hidden">
             <StackPanel>
                 <TextBlock HorizontalAlignment="Center" FontSize="72"><Run Text="?"/></TextBlock>
                 <TextBlock><Run Text="Help"/></TextBlock>
@@ -33,7 +33,7 @@
         </Button>
         <Button x:Name="level2Button" Content="Level 2" HorizontalAlignment="Left" Margin="9,246,0,0" VerticalAlignment="Top" Width="75" Click="level2Button_Click"/>
         <Button x:Name="level3Button" Content="Level 3" HorizontalAlignment="Left" Margin="9,279,0,0" VerticalAlignment="Top" Width="75" Click="level3Button_Click"/>
-        <Button x:Name="buildLevelButton" HorizontalAlignment="Left" Margin="410,213,0,0" VerticalAlignment="Top" Width="184" Height="166" Click="buildLevelButton_Click">
+        <Button x:Name="buildLevelButton" HorizontalAlignment="Left" Margin="213,213,0,0" VerticalAlignment="Top" Width="184" Height="166" Click="buildLevelButton_Click">
             <StackPanel>
                 <Image Source="Images/BuildYourOwn.png" Width="134" RenderOptions.BitmapScalingMode="HighQuality" />
                 <TextBlock Text="Build Your Own Level" />
