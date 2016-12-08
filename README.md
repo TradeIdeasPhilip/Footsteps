@@ -8,10 +8,10 @@ I looked for good resources for teaching young kids.  There's very little out th
 
 
 Basic skills they will practice:
-  You don't tell it what you want, you tell it how to get there.
-  You tell it all of the steps before you ask to see the result.
-  If you make a mistake you don't have to start from scratch.
-  And we try to use normal Windows controls as much as possible.
+* You don't tell it what you want, you tell it how to get there.
+* You tell it all of the steps before you ask to see the result.
+* If you make a mistake you don't have to start from scratch.
+* And we try to use normal Windows controls as much as possible.
 
 
 So it’s a lot like real programming, but it’s within reach of young children.
