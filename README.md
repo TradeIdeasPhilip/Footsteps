@@ -15,3 +15,5 @@ Basic skills they will practice:
 
 
 So it’s a lot like real programming, but it’s within reach of young children.
+
+![See the game in action.](http://www.trade-ideas.com/home/phil/Footsteps/Footsteps.png "See the game in action.")
