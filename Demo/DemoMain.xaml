@@ -1,0 +1,46 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Footsteps.Demo"
+             xmlns:Footsteps="clr-namespace:Footsteps" x:Class="Footsteps.Demo.DemoMain"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="406.032" Unloaded="UserControl_Unloaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="17*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="instructionsPrincess" HorizontalAlignment="Center" Orientation="Horizontal">
+            <TextBlock FontSize="20">Help the princess</TextBlock>
+            <Image Height="25" Source="/Footsteps;component/Images/Player.PNG"></Image>
+            <TextBlock FontSize="20"> find the goal</TextBlock>
+            <Image Height="25" Source="/Footsteps;component/Images/Goal.PNG"></Image>
+            <TextBlock FontSize="20">.</TextBlock>
+        </StackPanel>
+
+        <StackPanel x:Name="instructionsFence" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+            <TextBlock FontSize="20">Go around the fence&#160;</TextBlock>
+            <Image Height="25" Source="/Footsteps;component/Images/Fence.PNG"></Image>
+            <TextBlock FontSize="20">.</TextBlock>
+        </StackPanel>
+
+        <StackPanel x:Name="instructionsMonster" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <TextBlock FontSize="20">Don't touch the monster&#160;</TextBlock>
+            <Image Height="25" Source="/Footsteps;component/Images/Death.PNG"></Image>
+            <TextBlock FontSize="20">.</TextBlock>
+        </StackPanel>
+
+        <StackPanel x:Name="programStackPanel" Grid.Row="3" Orientation="Horizontal">
+            <TextBlock x:Name="sizePlaceHolder" FontSize="48"></TextBlock>
+        </StackPanel>
+        
+        <Footsteps:WorldView x:Name="worldView"  Grid.Row="4" />
+
+    </Grid>
+</UserControl>

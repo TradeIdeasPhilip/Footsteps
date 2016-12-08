@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Footsteps.StatusPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Footsteps"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Image x:Name="leftImage" VerticalAlignment="Center" LayoutUpdated="leftImage_LayoutUpdated"/>
+        <Label x:Name="statusLabel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="You won / you lost / keep trying" FontSize="24"/>
+        </Label>
+        <Image x:Name="rightImage" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>
