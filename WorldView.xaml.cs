@@ -166,6 +166,12 @@ namespace Footsteps
                 //Uri uri = new Uri("/Footsteps;component/Images/Death.PNG", UriKind.Relative);
                 Uri uri = new Uri("/Footsteps;component/Images/foot_prints.png", UriKind.Relative);
                 Image image = new Image();
+                // I'm starting from an image that's larger than we typically need.  So it shrinks
+                // each time we display it.  The images look pretty good on my newer system with
+                // high DPI monitors.  But when I go to an older system, where we have about half
+                // as many pixels, most of these pictures have rough edgest.  Setting the image
+                // quality to high makes things look a lot better on the older system.
+                RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
                 image.Source = new BitmapImage(uri);
                 RotateTransform rotate = new RotateTransform(angle/*, 0.5, 0.5*/);
                 image.RenderTransform = rotate;
@@ -214,12 +220,6 @@ namespace Footsteps
                 // Save the foot steps here.  We often recreate all the foot steps from
                 // scratch.  Before we do that we want to erase the old ones.
                 _footSteps.Add(offsetGrid);
-                /*
-                mainGrid.Children.Add(image);
-                Grid.SetColumn(image, previousX);
-                Grid.SetRow(image, previousY);
-                _images.Add(image);
-                */
             }
         }
 

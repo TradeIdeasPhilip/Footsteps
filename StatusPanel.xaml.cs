@@ -103,7 +103,10 @@ namespace Footsteps
                 // Each new image will have the same bitmap as the original.
                 Image newImage = new Image();
                 newImage.Source = source.Source;
-                
+
+                // We set this to high on all of our images.  I wish I could make that a global default.
+                RenderOptions.SetBitmapScalingMode(newImage, RenderOptions.GetBitmapScalingMode(source));
+                       
                 // These images will float on top of the rest of the window.
                 Panel.SetZIndex(newImage, 10);
                 newImage.ClipToBounds = false;

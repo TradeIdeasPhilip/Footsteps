@@ -12,10 +12,10 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="leftImage" VerticalAlignment="Center" LayoutUpdated="leftImage_LayoutUpdated"/>
+        <Image x:Name="leftImage" VerticalAlignment="Center" LayoutUpdated="leftImage_LayoutUpdated" RenderOptions.BitmapScalingMode="HighQuality" />
         <Label x:Name="statusLabel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="You won / you lost / keep trying" FontSize="24"/>
         </Label>
-        <Image x:Name="rightImage" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Image x:Name="rightImage" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" />
     </Grid>
 </UserControl>
