@@ -41,7 +41,17 @@
                 </StackPanel>
             </Button>
             <Button x:Name="level4Button" Content="Level 4" HorizontalAlignment="Left" Margin="109,213,0,0" VerticalAlignment="Top" Width="75" Click="level4Button_Click"/>
-            <Button x:Name="level5Button" Content="Level 5" HorizontalAlignment="Left" Margin="109,246,0,0" VerticalAlignment="Top" Width="75" Click="level5Button_Click"/>
+            <Button x:Name="level5Button" Content="Level 5" HorizontalAlignment="Left" Margin="422,463,-100,-112" VerticalAlignment="Top" Width="75" Click="level5Button_Click"/>
+            <Button x:Name="button" Content="ryders level!!!!!!!!$$$$$$$" HorizontalAlignment="Left" VerticalAlignment="Top" Width="209" Margin="183,465,0,-114" RenderTransformOrigin="1.006,7.991" Click="button_Click">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-0.629"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
         </Grid>
         <Demo:DemoMain Panel.ZIndex="-1" HorizontalAlignment="Stretch" Height="300" VerticalAlignment="Bottom"/>
     </Grid>
