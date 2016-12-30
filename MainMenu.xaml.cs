@@ -98,5 +98,11 @@ namespace Footsteps
         {
             ShowOnTop(new DoubleMap("S._G|____|_.__|__X_|_.__|____", "S._G|__X_|_.__|____|_.__|____"));
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            ShowOnTop(new MainWindow("  S  | ... |     |XxGxX"));
+          
+        }
     }
 }
